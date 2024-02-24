@@ -24,7 +24,7 @@ export default RandomizerScreen = ({ route, navigation }) => {
           keyExtractor={(item) => item[0]} // Use first player name as key
         />
       )}
-      <Button title="Start Game!"/>
+      <Button title="Start Game!" onPress={() => navigation.navigate('GameScreen', {teams})}/>
     </View>
   );
 };
