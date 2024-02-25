@@ -1,9 +1,40 @@
-import React from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import React from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  TouchableHighlight,
+} from "react-native";
 
-export default TeamBubble = ({ item , index}) => {
-  return (
-    <View key={index} style={styles.bubble}>
+const teamColors = ["blue", "red", "green", "yellow"];
+
+export default TeamBubble = ({ item, index, isTouchable, onPress }) => {
+  return isTouchable ? (
+    <TouchableHighlight
+      key={index}
+      style={[
+        styles.bubble,
+        { backgroundColor: teamColors[index % teamColors.length] },
+      ]}
+      onPress={onPress}
+    >
+      <Text style={styles.teamName}>Team {index + 1}</Text>
+      <FlatList
+        data={item}
+        renderItem={({ item }) => <Text style={styles.playerName}>{item}</Text>}
+        keyExtractor={(item) => item}
+        style={styles.playerList}
+      />
+    </TouchableHighlight>
+  ) : (
+    <View
+      key={index}
+      style={[
+        styles.bubble,
+        { backgroundColor: teamColors[index % teamColors.length] },
+      ]}
+    >
       <Text style={styles.teamName}>Team {index + 1}</Text>
       <FlatList
         data={item}
@@ -16,23 +47,25 @@ export default TeamBubble = ({ item , index}) => {
 };
 
 const styles = StyleSheet.create({
-    bubble: {
-      backgroundColor: '#72947f',
-      padding: 10,
-      borderRadius: 10,
-      margin:10
-    },
-    teamName: {
-      fontSize: 18,
-      fontWeight: 'bold',
-      textAlign: 'center',
-      marginBottom: 5,
-    },
-    playerList: {
-        //rendering players
-    },
-    playerName: {
-      fontSize: 14,
-      marginBottom: 5,
-    },
-  });
+  bubble: {
+    padding: 10,
+    borderRadius: 10,
+    borderColor: "black",
+    borderStyle: "solid",
+    borderWidth: "2px",
+    margin: 10,
+  },
+  teamName: {
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 5,
+  },
+  playerList: {
+    //rendering players
+  },
+  playerName: {
+    fontSize: 14,
+    marginBottom: 5,
+  },
+});
