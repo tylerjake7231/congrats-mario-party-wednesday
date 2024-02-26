@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-  TouchableOpacity,
   TextInput,
   Button,
   StyleSheet,
@@ -43,31 +42,19 @@ export default AddPlayerScreen = ({ navigation, route }) => {
     });
   };
 
-  const renderTeamTouchableOpacity = (team, index) => (
-    <>
-      <TouchableOpacity
-        key={index}
-        style={[
-          styles.teamButton,
-          selectedTeamIndex === index ? styles.selectedTeamButton : {},
-        ]}
-        onPress={() => handleTeamPress(index)}
-      >
-        <Text style={styles.teamButtonText}>Team {index + 1}</Text>
-      </TouchableOpacity>
-      {selectedTeamIndex === index && (
-        <>
-          <TextInput
-            style={styles.inputBox}
-            onChangeText={setPlayerName}
-            value={playerName}
-            placeholder="Enter player name..."
-          />
-          <Button title="Submit" onPress={handlePlayerSubmit} />
-        </>
-      )}
-    </>
-  );
+  const renderAddPlayerPrompt = () => {
+    return (
+      <>
+        <TextInput
+          style={styles.inputBox}
+          onChangeText={setPlayerName}
+          value={playerName}
+          placeholder="Enter player name..."
+        />
+        <Button title="Submit" onPress={handlePlayerSubmit} />
+      </>
+    )
+  }
 
   return (
     <View style={styles.container}>
@@ -75,14 +62,24 @@ export default AddPlayerScreen = ({ navigation, route }) => {
         Which team would you like to add a player to?
       </Text>
       <View style={styles.teamsContainer}>
-        {teams.map(renderTeamTouchableOpacity)}
+        {teams.map((team, index) => (
+          <View key={index}>
+            <TeamBubble
+              key={index}
+              item={team}
+              index={index}
+              isTouchable = {true}
+              selectedTeamIndex={selectedTeamIndex}
+              handleTeamPress={handleTeamPress}
+              render ={renderAddPlayerPrompt}
+            />
+          </View>
+        ))}
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  selectedTeamButton: {
-    backgroundColor: "yellow",
-  },
+
 });

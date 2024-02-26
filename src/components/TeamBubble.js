@@ -9,23 +9,21 @@ import {
 
 const teamColors = ["blue", "red", "green", "yellow"];
 
-export default TeamBubble = ({ item, index, isTouchable, onPress }) => {
+export default TeamBubble = ({ item, index, isTouchable, selectedTeamIndex, handleTeamPress, render}) => {
   return isTouchable ? (
     <TouchableHighlight
       key={index}
       style={[
         styles.bubble,
         { backgroundColor: teamColors[index % teamColors.length] },
+        selectedTeamIndex === index ? styles.selectedTeamBubble : {}, // Apply selected style
       ]}
-      onPress={onPress}
+      onPress={() => handleTeamPress(index)}
     >
-      <Text style={styles.teamName}>Team {index + 1}</Text>
-      <FlatList
-        data={item}
-        renderItem={({ item }) => <Text style={styles.playerName}>{item}</Text>}
-        keyExtractor={(item) => item}
-        style={styles.playerList}
-      />
+      <>
+        <TeamBubbleData item={item} index={index}/>
+        {selectedTeamIndex === index && render()}
+      </>
     </TouchableHighlight>
   ) : (
     <View
@@ -35,6 +33,14 @@ export default TeamBubble = ({ item, index, isTouchable, onPress }) => {
         { backgroundColor: teamColors[index % teamColors.length] },
       ]}
     >
+      <TeamBubbleData item={item} index={index}/>
+    </View>
+  );
+};
+
+const TeamBubbleData = ({ item, index}) => {
+  return (
+    <>
       <Text style={styles.teamName}>Team {index + 1}</Text>
       <FlatList
         data={item}
@@ -42,9 +48,9 @@ export default TeamBubble = ({ item, index, isTouchable, onPress }) => {
         keyExtractor={(item) => item}
         style={styles.playerList}
       />
-    </View>
-  );
-};
+    </>
+  )
+}
 
 const styles = StyleSheet.create({
   bubble: {
@@ -54,6 +60,9 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderWidth: "2px",
     margin: 10,
+  },
+  selectedTeamBubble: {
+    backgroundColor: 'gold', // Or your desired color
   },
   teamName: {
     fontSize: 18,
